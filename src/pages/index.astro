@@ -1,0 +1,28 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Hero from '../components/Hero.astro';
+import Benefits from '../components/Benefits.astro';
+import HowItWorks from '../components/HowItWorks.astro';
+import Testimonials from '../components/Testimonials.astro';
+import CTA from '../components/CTA.astro';
+---
+
+<Layout title="אקווה גיק - פתרונות מקצועיים לאקווריומים">
+	<main dir="rtl">
+		<Hero />
+		<Benefits />
+		<HowItWorks />
+		<Testimonials />
+		<CTA />
+	</main>
+</Layout>
+
+<style>
+	main {
+		margin: 0 auto;
+		width: 100%;
+		color: #2d3748;
+		font-size: 16px;
+		line-height: 1.6;
+	}
+</style>

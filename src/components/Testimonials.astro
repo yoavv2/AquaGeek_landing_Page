@@ -1,0 +1,84 @@
+---
+const testimonials = [
+	{
+		name: 'דני כהן',
+		text: 'השירות המקצועי והאדיב של אקווה גיק עזר לי לשמור על האקווריום שלי במצב מושלם.',
+		role: 'בעל אקווריום מים מתוקים'
+	},
+	{
+		name: 'מיכל לוי',
+		text: 'הצוות המקצועי והידע הרב שלהם עזרו לי להקים את האקווריום המושלם.',
+		role: 'בעלת אקווריום שונית'
+	},
+	{
+		name: 'יוסי אברהם',
+		text: 'המחירים הוגנים והשירות מעולה. ממליץ בחום!',
+		role: 'לקוח ותיק'
+	}
+];
+---
+
+<section class="testimonials">
+	<div class="container">
+		<h2>מה הלקוחות אומרים</h2>
+		<div class="testimonials-grid">
+			{testimonials.map(testimonial => (
+				<div class="testimonial-card">
+					<p class="text">"{testimonial.text}"</p>
+					<div class="author">
+						<strong>{testimonial.name}</strong>
+						<span>{testimonial.role}</span>
+					</div>
+				</div>
+			))}
+		</div>
+	</div>
+</section>
+
+<style>
+	.testimonials {
+		padding: 5rem 0;
+		background: var(--background);
+	}
+
+	.container {
+		max-width: 1200px;
+		margin: 0 auto;
+		padding: 0 1rem;
+	}
+
+	h2 {
+		text-align: center;
+		font-size: 2.5rem;
+		margin-bottom: 3rem;
+	}
+
+	.testimonials-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+		gap: 2rem;
+	}
+
+	.testimonial-card {
+		background: white;
+		padding: 2rem;
+		border-radius: 8px;
+		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+	}
+
+	.text {
+		font-style: italic;
+		margin-bottom: 1.5rem;
+	}
+
+	.author {
+		display: flex;
+		flex-direction: column;
+		gap: 0.25rem;
+	}
+
+	.author span {
+		color: #666;
+		font-size: 0.9rem;
+	}
+</style>
