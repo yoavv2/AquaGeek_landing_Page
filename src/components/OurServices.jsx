@@ -25,14 +25,14 @@ const services = [
 const OurServices = () => {
   return (
     <section className='my-8'>
-      <h3 className='text-3xl font-bold text-center text-[--primary-dark] mb-4'>
+      <h3 className='text-[2.5rem]  text-center text-[--primary-dark] mb-4'>
         מה תוכל למצוא אצלנו?
       </h3>
-      <div className='grid md:grid-cols-3 gap-8'>
+      <div className='grid gap-8 md:grid-cols-3'>
         {services.map((service, index) => (
           <div
             key={index}
-            className='bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition duration-300'
+            className='p-6 transition duration-300 bg-white rounded-lg shadow-md hover:shadow-lg'
           >
             <div className='flex items-center mb-4'>
               {service.icon}

@@ -36,7 +36,7 @@ export default function Carousel({ options = { loop: true } }) {
 
   return (
     <div className='max-w-3xl px-4 py-8 mx-auto'>
-      <h2 className='text-3xl font-bold text-center text-[--primary-dark] mb-6'>
+      <h2 className='text-[2.5rem] text-center text-[--primary-dark] mb-6'>
         גלריית פרויקטים שלנו: דוגמאות נבחרות מהעיצובים המרהיבים שלנו
       </h2>
       <div className='relative overflow-hidden aspect-video'>
