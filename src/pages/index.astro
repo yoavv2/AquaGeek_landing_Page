@@ -5,7 +5,7 @@ import Hero from '../components/Hero.astro';
 import Benefits from '../components/Benefits.astro';
 import HowItWorks from '../components/HowItWorks.astro';
 import Testimonials from '../components/Testimonials.astro';
-import CTA from '../components/CTA.astro';
+import CTA from '../components/CTA';
 import FAQ from '../components/FAQ'
 import Carousel from "../components/Carousel";
 import SpecialOffer from '../components/SpecialOffer'
@@ -16,7 +16,7 @@ import OurServices from '../components/OurServices'
 
 <Layout title="אקווה גיק - פתרונות מקצועיים לאקווריומים">
 
-	<main dir="rtl" class="mx-auto w-full text-gray-800 text-base leading-relaxed">
+	<main dir="rtl" class="w-full mx-auto text-base leading-relaxed text-gray-800">
 
 		<Hero />
 		<Carousel client:load/>
@@ -26,7 +26,7 @@ import OurServices from '../components/OurServices'
 		<SpecialOffer/>
 		<Testimonials />
 		<FAQ client:load/>
-		<CTA />
+		<CTA client:load/>
 	</main>
 </Layout>
 
