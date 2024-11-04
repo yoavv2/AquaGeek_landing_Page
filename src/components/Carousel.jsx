@@ -11,14 +11,14 @@ const images = [
 ];
 
 export default function Carousel({ options = { loop: true } }) {
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [currentIndex, setCurrentIndex] = useState(images.length - 1);
 
   const goToSlide = useCallback((index) => {
     setCurrentIndex(index);
   }, []);
 
   const goToNextSlide = useCallback(() => {
-    const nextIndex = (currentIndex - 1) % images.length;
+    const nextIndex = (currentIndex + 1) % images.length;
     goToSlide(nextIndex);
   }, [currentIndex, goToSlide]);
 
@@ -29,10 +29,10 @@ export default function Carousel({ options = { loop: true } }) {
 
   useEffect(() => {
     if (options.loop) {
-      const timer = setInterval(goToNextSlide, 5000);
+      const timer = setInterval(goToPrevSlide, 5000);
       return () => clearInterval(timer);
     }
-  }, [goToNextSlide, options.loop]);
+  }, [goToPrevSlide, options.loop]);
 
   return (
     <div className='max-w-3xl px-4 py-8 mx-auto'>
