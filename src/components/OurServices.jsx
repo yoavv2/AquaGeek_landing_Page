@@ -25,9 +25,9 @@ const services = [
 const OurServices = () => {
   return (
     <section className='my-8'>
-      <h3 className='text-[2.5rem]  text-center text-[--primary-dark] mb-4'>
+      <h2 className='text-[2.5rem]  text-center text-[--primary-dark] mb-4'>
         מה תוכל למצוא אצלנו?
-      </h3>
+      </h2>
       <div className='grid gap-8 md:grid-cols-3'>
         {services.map((service, index) => (
           <div
@@ -36,9 +36,7 @@ const OurServices = () => {
           >
             <div className='flex items-center mb-4'>
               {service.icon}
-              <h4 className='text-xl font-bold text-[--primary] ml-3'>
-                {service.title}
-              </h4>
+              <h3 className=' text-[1.5rem] '>{service.title}</h3>
             </div>
             <p className='text-gray-700'>{service.description}</p>
           </div>
