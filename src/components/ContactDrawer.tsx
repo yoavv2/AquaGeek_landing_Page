@@ -132,7 +132,7 @@ const ContactDrawer = ({ triggerText, buttonClassName }) => {
               type='email'
               id='email'
               name='email'
-              placeholder='הכתובת שאליה נשלח את המידע המועיל עבורך'
+              placeholder='כתובת המייל לקבלת עדכונים'
               required
               value={formData.email}
               onChange={handleInputChange}
@@ -143,7 +143,7 @@ const ContactDrawer = ({ triggerText, buttonClassName }) => {
               type='tel'
               id='phone'
               name='phone'
-              placeholder='מספר נייד להתייעצות מהירה – אנחנו כאן בשבילך!'
+              placeholder='מספר נייד לייעוץ מהיר'
               required
               value={formData.phone}
               onChange={handleInputChange}
