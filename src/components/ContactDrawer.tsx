@@ -42,12 +42,6 @@ const ContactDrawer = ({ triggerText, buttonClassName }) => {
       const tableName = import.meta.env.PUBLIC_AIRTABLE_TABLE_NAME;
       const apiKey = import.meta.env.PUBLIC_AIRTABLE_API_KEY;
 
-      console.log('BASE_ID:', baseId); // אמור להציג את appTrPAYqNGDEKGCM
-      console.log('TABLE_NAME:', tableName); // אמור להציג את tbl7uFiGkM3odbDTW
-      console.log('API_KEY:', apiKey); // אמור להציג את ה-API Key
-
-      console.log(`https://api.airtable.com/v0/${baseId}/${tableName}`);
-
       const response = await fetch(
         `https://api.airtable.com/v0/${baseId}/${tableName}`,
         {
@@ -67,7 +61,6 @@ const ContactDrawer = ({ triggerText, buttonClassName }) => {
         }
       );
 
-      console.log('Response status:', response.status);
       if (response.ok) {
         alert('הטופס נשלח בהצלחה!');
         setFormData({ name: '', email: '', phone: '', message: '' });
