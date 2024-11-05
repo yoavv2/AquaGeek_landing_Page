@@ -10,6 +10,12 @@ import {
 const ContactDrawer = ({ triggerText, buttonClassName }) => {
   const [showModal, setShowModal] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    message: '',
+  });
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -21,6 +27,56 @@ const ContactDrawer = ({ triggerText, buttonClassName }) => {
       return () => window.removeEventListener('resize', handleResize);
     }
   }, []);
+
+  const handleInputChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      console.log('BASE_ID:', import.meta.env.PUBLIC_AIRTABLE_BASE_ID);
+      console.log('TABLE_NAME:', import.meta.env.PUBLIC_AIRTABLE_TABLE_NAME);
+      console.log('API_KEY:', import.meta.env.PUBLIC_AIRTABLE_API_KEY);
+
+      const response = await fetch(
+        `https://api.airtable.com/v0/${
+          import.meta.env.PUBLIC_AIRTABLE_BASE_ID
+        }/${import.meta.env.PUBLIC_AIRTABLE_TABLE_NAME}`,
+        {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${import.meta.env.PUBLIC_AIRTABLE_API_KEY}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            fields: {
+              Name: formData.name,
+              Email: formData.email,
+              Phone: formData.phone,
+              Message: formData.message,
+            },
+          }),
+        }
+      );
+
+      console.log('Response status:', response.status);
+      if (response.ok) {
+        alert('הטופס נשלח בהצלחה!');
+        setFormData({ name: '', email: '', phone: '', message: '' });
+      } else {
+        const errorData = await response.json();
+        console.error('Error details:', errorData);
+        alert('שגיאה בשליחת הטופס, נסה שנית.');
+      }
+    } catch (error) {
+      console.error('Error submitting the form:', error);
+      alert('שגיאה בשליחת הטופס, נסה שנית.');
+    }
+  };
 
   return (
     <Drawer>
@@ -41,7 +97,7 @@ const ContactDrawer = ({ triggerText, buttonClassName }) => {
           isMobile
             ? 'inset-x-0 bottom-0'
             : 'inset-0 justify-center items-center'
-        } z-50 mt-24 flex h-auto flex-col rounded-t-[20px] border-none  shadow-lg transition-transform duration-500 ease-in-out transform-gpu`}
+        } z-50 mt-24 flex h-auto flex-col rounded-t-[20px] border-none shadow-lg transition-transform duration-500 ease-in-out transform-gpu`}
       >
         {isMobile ? (
           <div className='mx-auto mt-4 h-1 w-[100px] rounded-full bg-gray-300' />
@@ -60,43 +116,47 @@ const ContactDrawer = ({ triggerText, buttonClassName }) => {
           <h3 className='mb-6 text-3xl font-semibold text-center text-gray-800'>
             השאר פרטים
           </h3>
-          <form>
-            <label
-              htmlFor='name'
-              className='block mb-2 font-semibold text-right text-gray-700'
-            >
-              שם:
-            </label>
+          <form onSubmit={handleSubmit}>
             <input
               type='text'
               id='name'
               name='name'
+              placeholder='איך תרצה שנקרא לך?'
               required
+              value={formData.name}
+              onChange={handleInputChange}
               className='w-full p-3 mb-4 text-gray-900 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500'
             />
-            <label
-              htmlFor='email'
-              className='block mb-2 font-semibold text-right text-gray-700'
-            >
-              אימייל:
-            </label>
+
             <input
               type='email'
               id='email'
               name='email'
+              placeholder='הכתובת שאליה נשלח את המידע המועיל עבורך'
               required
+              value={formData.email}
+              onChange={handleInputChange}
               className='w-full p-3 mb-4 text-gray-900 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500'
             />
-            <label
-              htmlFor='message'
-              className='block mb-2 font-semibold text-right text-gray-700'
-            >
-              הודעה:
-            </label>
+
+            <input
+              type='tel'
+              id='phone'
+              name='phone'
+              placeholder='מספר נייד להתייעצות מהירה – אנחנו כאן בשבילך!'
+              required
+              value={formData.phone}
+              onChange={handleInputChange}
+              className='w-full p-3 mb-4 text-gray-900 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500'
+              style={{ textAlign: 'right' }}
+            />
+
             <textarea
               id='message'
               name='message'
-              required
+              placeholder='איך נוכל לעזור? שתף אותנו בכל מה שבא לך'
+              value={formData.message}
+              onChange={handleInputChange}
               className='w-full p-3 mb-4 text-gray-900 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500'
             ></textarea>
             <button
