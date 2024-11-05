@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { type FC } from 'react';
 import ContactDrawer from './ContactDrawer';
 
-const ContactModal = () => {
+
+
+const ContactModal: FC = () => {
   return (
     <section className='py-20 text-center text-white bg-[--primary]'>
       <div className='max-w-6xl px-4 mx-auto'>

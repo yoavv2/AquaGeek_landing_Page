@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import type { ChangeEvent, FormEvent } from 'react';
 import {
   Drawer,
   DrawerTrigger,
@@ -7,10 +8,25 @@ import {
   DrawerOverlay,
 } from './ui/Drawercontent';
 
-const ContactDrawer = ({ triggerText, buttonClassName }) => {
-  const [showModal, setShowModal] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
-  const [formData, setFormData] = useState({
+interface ContactDrawerProps {
+  triggerText: string;
+  buttonClassName?: string;
+}
+
+interface FormData {
+  name: string;
+  email: string;
+  phone: string;
+  message: string;
+}
+
+const ContactDrawer: React.FC<ContactDrawerProps> = ({
+  triggerText,
+  buttonClassName,
+}) => {
+  const [showModal, setShowModal] = useState<boolean>(false);
+  const [isMobile, setIsMobile] = useState<boolean>(false);
+  const [formData, setFormData] = useState<FormData>({
     name: '',
     email: '',
     phone: '',
@@ -28,19 +44,23 @@ const ContactDrawer = ({ triggerText, buttonClassName }) => {
     }
   }, []);
 
-  const handleInputChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+  const handleInputChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const baseId = import.meta.env.PUBLIC_AIRTABLE_BASE_ID;
-      const tableName = import.meta.env.PUBLIC_AIRTABLE_TABLE_NAME;
-      const apiKey = import.meta.env.PUBLIC_AIRTABLE_API_KEY;
+      const baseId: string = import.meta.env.PUBLIC_AIRTABLE_BASE_ID as string;
+      const tableName: string = import.meta.env
+        .PUBLIC_AIRTABLE_TABLE_NAME as string;
+      const apiKey: string = import.meta.env.PUBLIC_AIRTABLE_API_KEY as string;
 
       const response = await fetch(
         `https://api.airtable.com/v0/${baseId}/${tableName}`,
@@ -64,6 +84,7 @@ const ContactDrawer = ({ triggerText, buttonClassName }) => {
       if (response.ok) {
         alert('הטופס נשלח בהצלחה!');
         setFormData({ name: '', email: '', phone: '', message: '' });
+        setShowModal(false); // סגירת המודל
       } else {
         const errorData = await response.json();
         console.error('Error details:', errorData);
@@ -76,7 +97,7 @@ const ContactDrawer = ({ triggerText, buttonClassName }) => {
   };
 
   return (
-    <Drawer>
+    <Drawer open={showModal} onClose={() => setShowModal(false)}>
       <DrawerTrigger asChild>
         <button
           onClick={() => setShowModal(true)}
@@ -98,9 +119,7 @@ const ContactDrawer = ({ triggerText, buttonClassName }) => {
       >
         {isMobile ? (
           <div className='mx-auto mt-4 h-1 w-[100px] rounded-full bg-gray-300' />
-        ) : (
-          ''
-        )}
+        ) : null}
         <div className='w-full max-w-lg p-8 mx-auto bg-white rounded-lg'>
           <DrawerClose asChild>
             <span
@@ -168,4 +187,5 @@ const ContactDrawer = ({ triggerText, buttonClassName }) => {
     </Drawer>
   );
 };
+
 export default ContactDrawer;

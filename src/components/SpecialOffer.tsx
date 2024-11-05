@@ -1,6 +1,7 @@
+import React, { type FC } from 'react';
 import ContactDrawer from './ContactDrawer';
 
-const SpecialOffer = () => {
+const SpecialOffer: FC = () => {
   return (
     <section className='p-8 my-8 text-white rounded-lg shadow-lg bg-gradient-to-r from-blue-700 to-green-500'>
       <h3 className='mb-4 text-3xl font-bold text-center'>
@@ -12,7 +13,7 @@ const SpecialOffer = () => {
         עבורך פינת טבע מרגיעה בהתאמה אישית לבית או למשרד שלך!
       </p>
       <div className='text-center'>
-        <ContactDrawer triggerText='קבל ייעוץ חינם' />
+        <ContactDrawer triggerText='קבל ייעוץ חינם'  />
       </div>
     </section>
   );
