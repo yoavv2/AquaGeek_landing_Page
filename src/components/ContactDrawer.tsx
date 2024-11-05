@@ -38,18 +38,18 @@ const ContactDrawer = ({ triggerText, buttonClassName }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      console.log('BASE_ID:', import.meta.env.VITE_AIRTABLE_BASE_ID);
-      console.log('TABLE_NAME:', import.meta.env.VITE_AIRTABLE_TABLE_NAME);
-      console.log('API_KEY:', import.meta.env.VITE_AIRTABLE_API_KEY);
+      console.log('BASE_ID:', import.meta.env.PUBLIC_AIRTABLE_BASE_ID);
+      console.log('TABLE_NAME:', import.meta.env.PUBLIC_AIRTABLE_TABLE_NAME);
+      console.log('API_KEY:', import.meta.env.PUBLIC_AIRTABLE_API_KEY);
 
       const response = await fetch(
-        `https://api.airtable.com/v0/${import.meta.env.VITE_AIRTABLE_BASE_ID}/${
-          import.meta.env.VITE_AIRTABLE_TABLE_NAME
+        `https://api.airtable.com/v0/${import.meta.env.AIRTABLE_BASE_ID}/${
+          import.meta.env.AIRTABLE_TABLE_NAME
         }`,
         {
           method: 'POST',
           headers: {
-            Authorization: `Bearer ${import.meta.env.VITE_AIRTABLE_API_KEY}`,
+            Authorization: `Bearer ${import.meta.env.PUBLIC_AIRTABLE_API_KEY}`,
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
