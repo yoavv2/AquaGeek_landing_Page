@@ -38,18 +38,22 @@ const ContactDrawer = ({ triggerText, buttonClassName }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      console.log('BASE_ID:', import.meta.env.PUBLIC_AIRTABLE_BASE_ID);
-      console.log('TABLE_NAME:', import.meta.env.PUBLIC_AIRTABLE_TABLE_NAME);
-      console.log('API_KEY:', import.meta.env.PUBLIC_AIRTABLE_API_KEY);
+      const baseId = import.meta.env.PUBLIC_AIRTABLE_BASE_ID;
+      const tableName = import.meta.env.PUBLIC_AIRTABLE_TABLE_NAME;
+      const apiKey = import.meta.env.PUBLIC_AIRTABLE_API_KEY;
+
+      console.log('BASE_ID:', baseId); // אמור להציג את appTrPAYqNGDEKGCM
+      console.log('TABLE_NAME:', tableName); // אמור להציג את tbl7uFiGkM3odbDTW
+      console.log('API_KEY:', apiKey); // אמור להציג את ה-API Key
+
+      console.log(`https://api.airtable.com/v0/${baseId}/${tableName}`);
 
       const response = await fetch(
-        `https://api.airtable.com/v0/${import.meta.env.AIRTABLE_BASE_ID}/${
-          import.meta.env.AIRTABLE_TABLE_NAME
-        }`,
+        `https://api.airtable.com/v0/${baseId}/${tableName}`,
         {
           method: 'POST',
           headers: {
-            Authorization: `Bearer ${import.meta.env.PUBLIC_AIRTABLE_API_KEY}`,
+            Authorization: `Bearer ${apiKey}`,
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
