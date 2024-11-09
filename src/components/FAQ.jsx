@@ -5,7 +5,8 @@ import {
   AccordionTrigger,
 } from '@radix-ui/react-accordion';
 import React from 'react';
-import { FiChevronDown } from 'react-icons/fi';
+import { FiChevronDown, FiChevronUp } from 'react-icons/fi';
+import { useState } from 'react';
 
 const faqs = [
   {
@@ -36,6 +37,15 @@ const faqs = [
 ];
 
 const FAQ = () => {
+  const [openItems, setOpenItems] = useState({});
+
+  const handleToggle = (index) => {
+    setOpenItems((prev) => ({
+      ...prev,
+      [index]: !prev[index],
+    }));
+  };
+
   return (
     <section className='my-8'>
       <h2 className='text-[2.5rem] text-center text-[--primary-dark] mb-4'>
@@ -48,9 +58,16 @@ const FAQ = () => {
             value={`faq-${index}`}
             className='p-4 transition duration-300 bg-white rounded-lg shadow-md hover:shadow-lg'
           >
-            <AccordionTrigger className='flex items-center justify-between text-xl font-bold text-[--primary-dark]'>
+            <AccordionTrigger
+              onClick={() => handleToggle(index)}
+              className='flex items-center justify-between text-xl font-bold text-[--primary]'
+            >
               <span>{faq.question}</span>
-              <FiChevronDown className='ml-2 transition-transform duration-300' />
+              {openItems[index] ? (
+                <FiChevronUp className='ml-2 transition-transform duration-300' />
+              ) : (
+                <FiChevronDown className='ml-2 transition-transform duration-300' />
+              )}
             </AccordionTrigger>
             <AccordionContent className='mt-2 text-gray-700'>
               {faq.answer}
