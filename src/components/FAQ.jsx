@@ -5,6 +5,7 @@ import {
   AccordionTrigger,
 } from '@radix-ui/react-accordion';
 import React from 'react';
+import { FiChevronDown } from 'react-icons/fi';
 
 const faqs = [
   {
@@ -47,8 +48,9 @@ const FAQ = () => {
             value={`faq-${index}`}
             className='p-4 transition duration-300 bg-white rounded-lg shadow-md hover:shadow-lg'
           >
-            <AccordionTrigger className='text-xl font-bold text-[--primary]'>
-              {faq.question}
+            <AccordionTrigger className='flex items-center justify-between text-xl font-bold text-[--primary-dark]'>
+              <span>{faq.question}</span>
+              <FiChevronDown className='ml-2 transition-transform duration-300' />
             </AccordionTrigger>
             <AccordionContent className='mt-2 text-gray-700'>
               {faq.answer}

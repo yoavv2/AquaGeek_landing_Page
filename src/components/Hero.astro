@@ -7,7 +7,7 @@
 		<p class="subtitle">הטבע במרחק נגיעה – אקווריום בהתאמה אישית שייתן לביתך נגיעה של יופי ושלווה ייחודיים</p>
 		<p class="subtitle">ב"אקווה גיק", אנו מביאים את היופי והשלווה של עולם המים ישירות לביתך, עם עיצוב אקווריומים ובריכות נוי בהתאמה אישית לכל חלל ולכל חלום. עם מעל עשור של ניסיון ולקוחות מרוצים, כל פרויקט הוא יצירת אומנות המשלבת מקצועיות, יצירתיות ומגע אישי.</p>
 		<div class="cta-buttons">
-			<a href="tel:+972526383226" class="btn primary">הזמן תחזוקה עכשיו</a>
+			<a href="https://wa.me/972526383226?text=שלום, אני מעוניין בקבלת יעוץ." class="btn primary">הזמן תחזוקה עכשיו</a>
 			<a href="https://www.aquageek.co.il/" class="btn secondary">גלה את המוצרים שלנו</a>
 		</div>
 	</div>
@@ -15,10 +15,10 @@
 
 <style>
 	.hero {
-		background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/coral-hero-bg.jpg');
+		background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.7)), url('/coral-hero-bg.jpg');
 		background-size: cover;
 		background-position: center;
-		padding: 8rem 0;
+		padding: 1.5rem 0;
 		text-align: center;
 		color: white;
 	}
@@ -55,7 +55,7 @@
 	}
 
 	.primary {
-		background: #3182ce;
+		background: #3182ce; 
 		color: white;
 	}
 
@@ -71,5 +71,20 @@
 
 	.secondary:hover {
 		background: rgba(255, 255, 255, 0.1);
+	}
+
+	@media (max-width: 768px) {
+		h1 {
+			font-size: 2.5rem;
+		}
+		
+		.subtitle {
+			font-size: 1.2rem;
+		}
+
+		.cta-buttons {
+			flex-direction: column;
+			gap: 0.5rem;
+		}
 	}
 </style>
