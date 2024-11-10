@@ -56,13 +56,16 @@ const ContactDrawer: React.FC<ContactDrawerProps> = ({
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    let isSuccess = false;
+
     try {
+      // Send data to Airtable
       const baseId: string = import.meta.env.PUBLIC_AIRTABLE_BASE_ID as string;
       const tableName: string = import.meta.env
         .PUBLIC_AIRTABLE_TABLE_NAME as string;
       const apiKey: string = import.meta.env.PUBLIC_AIRTABLE_API_KEY as string;
 
-      const response = await fetch(
+      const airtableResponse = await fetch(
         `https://api.airtable.com/v0/${baseId}/${tableName}`,
         {
           method: 'POST',
@@ -81,17 +84,43 @@ const ContactDrawer: React.FC<ContactDrawerProps> = ({
         }
       );
 
-      if (response.ok) {
-        alert('הטופס נשלח בהצלחה!');
-        setFormData({ name: '', email: '', phone: '', message: '' });
-        setShowModal(false); // סגירת המודל
+      if (airtableResponse.ok) {
+        isSuccess = true;
       } else {
-        const errorData = await response.json();
+        const errorData = await airtableResponse.json();
         console.error('Error details:', errorData);
-        alert('שגיאה בשליחת הטופס, נסה שנית.');
+        alert('שגיאה בשליחת הטופס ל-Airtable, נסה שנית.');
       }
     } catch (error) {
-      console.error('Error submitting the form:', error);
+      console.error('Error submitting the form to Airtable:', error);
+    }
+
+    try {
+ 
+      const webhookUrl = import.meta.env.PUBLIC_WEBHOOK_URL as string;
+      const webhookResponse = await fetch(webhookUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (webhookResponse.ok) {
+        isSuccess = true;
+      } else {
+        console.error('Error sending data to webhook');
+        alert('שגיאה בשליחת הטופס ל-Webhook, נסה שנית.');
+      }
+    } catch (error) {
+      console.error('Error submitting the form to webhook:', error);
+    }
+
+    if (isSuccess) {
+      alert('הטופס נשלח בהצלחה!');
+      setFormData({ name: '', email: '', phone: '', message: '' });
+      setShowModal(false);
+    } else {
       alert('שגיאה בשליחת הטופס, נסה שנית.');
     }
   };
