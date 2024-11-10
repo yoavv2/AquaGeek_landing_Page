@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import type { ChangeEvent, FormEvent } from 'react';
+import confetti from 'canvas-confetti';
 import {
   Drawer,
   DrawerTrigger,
@@ -59,7 +60,6 @@ const ContactDrawer: React.FC<ContactDrawerProps> = ({
     let isSuccess = false;
 
     try {
-      // Send data to Airtable
       const baseId: string = import.meta.env.PUBLIC_AIRTABLE_BASE_ID as string;
       const tableName: string = import.meta.env
         .PUBLIC_AIRTABLE_TABLE_NAME as string;
@@ -89,15 +89,17 @@ const ContactDrawer: React.FC<ContactDrawerProps> = ({
       } else {
         const errorData = await airtableResponse.json();
         console.error('Error details:', errorData);
-        alert('שגיאה בשליחת הטופס ל-Airtable, נסה שנית.');
       }
     } catch (error) {
       console.error('Error submitting the form to Airtable:', error);
     }
 
     try {
- 
       const webhookUrl = import.meta.env.PUBLIC_WEBHOOK_URL as string;
+      if (!webhookUrl) {
+        throw new Error('Webhook URL is not defined.');
+      }
+
       const webhookResponse = await fetch(webhookUrl, {
         method: 'POST',
         headers: {
@@ -109,17 +111,23 @@ const ContactDrawer: React.FC<ContactDrawerProps> = ({
       if (webhookResponse.ok) {
         isSuccess = true;
       } else {
-        console.error('Error sending data to webhook');
-        alert('שגיאה בשליחת הטופס ל-Webhook, נסה שנית.');
+        console.error(
+          'Error sending data to webhook:',
+          await webhookResponse.text()
+        );
       }
     } catch (error) {
       console.error('Error submitting the form to webhook:', error);
     }
 
     if (isSuccess) {
-      alert('הטופס נשלח בהצלחה!');
       setFormData({ name: '', email: '', phone: '', message: '' });
       setShowModal(false);
+      confetti({
+        particleCount: 150,
+        spread: 70,
+        origin: { y: 0.6 },
+      });
     } else {
       alert('שגיאה בשליחת הטופס, נסה שנית.');
     }
