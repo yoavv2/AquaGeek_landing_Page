@@ -1,14 +1,32 @@
 import React, { useState, useEffect, useCallback } from 'react';
 
-const images = [
-  { id: 1, src: '/gallery_image1.jpg', alt: 'project 1' },
-  { id: 2, src: '/gallery_image2.jpg', alt: 'project 2' },
-  { id: 3, src: '/gallery_image3.png', alt: 'project 3' },
-  { id: 4, src: '/gallery_image4.png', alt: 'project 4' },
-  { id: 5, src: '/gallery_image5.jpg', alt: 'project 5' },
-  { id: 6, src: '/gallery_image6.jpg', alt: 'project 6' },
-  { id: 7, src: '/gallery_image7.jpg', alt: 'project 7' },
+const newImageSources = [
+  'public/aquaGeekImages/carusel_image_1.jpeg ',
+  'public/aquaGeekImages/carusel_image_2.jpeg ',
+  'public/aquaGeekImages/carusel_image_3.jpeg ',
+  'public/aquaGeekImages/carusel_image_4.jpeg ',
+  'public/aquaGeekImages/carusel_image_5.jpeg ',
+  'public/aquaGeekImages/carusel_image_6.jpeg ',
+  'public/aquaGeekImages/carusel_image_7.jpeg ',
+  'public/aquaGeekImages/carusel_image_8.jpeg ',
+  'public/aquaGeekImages/carusel_image_9.jpeg ',
+  'public/aquaGeekImages/carusel_image_10.jpeg ',
+  'public/aquaGeekImages/carusel_image_11.jpeg ',
+  'public/aquaGeekImages/carusel_image_12.jpeg ',
+  'public/aquaGeekImages/carusel_image_13.jpeg ',
+  'public/aquaGeekImages/carusel_image_14.jpeg ',
+  'public/aquaGeekImages/carusel_image_15.jpeg ',
+  'public/aquaGeekImages/carusel_image_16.jpeg ',
+  'public/aquaGeekImages/carusel_image_17.jpeg ',
+  'public/aquaGeekImages/carusel_image_18.jpeg ',
+  'public/aquaGeekImages/carusel_image_19.jpeg',
 ];
+
+const images = newImageSources.map((src, index) => ({
+  id: index + 1,
+  src: src,
+  alt: `project ${index + 1}`,
+}));
 
 export default function Carousel({ options = { loop: true } }) {
   const [currentIndex, setCurrentIndex] = useState(images.length - 1);
