@@ -6,7 +6,6 @@ import {
 } from '@radix-ui/react-accordion';
 import React from 'react';
 import { FiChevronDown, FiChevronUp } from 'react-icons/fi';
-import { useState } from 'react';
 
 const faqs = [
   {
@@ -29,15 +28,15 @@ const faqs = [
     answer:
       'אנו ממליצים על תחזוקה שוטפת אחת לשבועיים עד חודש, תלוי בגודל המערכת וסוגי הדגים והצמחים. התחזוקה כוללת ניקיון, בדיקות מים, וטיפול בציוד כדי להבטיח שהאקווריום יישאר בריא ומאוזן.',
   },
-  // {
-  //   question: 'האם יש אחריות על השירות?',
-  //   answer:
-  //     'כמובן! אנו מציעים אחריות על כל ההתקנות והשירותים שלנו, כך שתוכל להיות בטוח שהאקווריום שלך בידיים טובות.',
-  // },
 ];
 
 const FAQ = () => {
-  const [openItems, setOpenItems] = useState({});
+  // Return early if we're on the server
+  if (typeof window === 'undefined') {
+    return null;
+  }
+
+  const [openItems, setOpenItems] = React.useState({});
 
   const handleToggle = (index) => {
     setOpenItems((prev) => ({

@@ -29,28 +29,35 @@ const images = newImageSources.map((src, index) => ({
 }));
 
 export default function Carousel({ options = { loop: true } }) {
+  const [isClient, setIsClient] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(images.length - 1);
 
-  const goToSlide = useCallback((index) => {
-    setCurrentIndex(index);
+  useEffect(() => {
+    setIsClient(true);
   }, []);
 
+  const goToSlide = useCallback((index) => {
+    if (!isClient) return;
+    setCurrentIndex(index);
+  }, [isClient]);
+
   const goToNextSlide = useCallback(() => {
+    if (!isClient) return;
     const nextIndex = (currentIndex + 1) % images.length;
     goToSlide(nextIndex);
-  }, [currentIndex, goToSlide]);
+  }, [currentIndex, goToSlide, isClient]);
 
   const goToPrevSlide = useCallback(() => {
+    if (!isClient) return;
     const prevIndex = (currentIndex - 1 + images.length) % images.length;
     goToSlide(prevIndex);
-  }, [currentIndex, goToSlide]);
+  }, [currentIndex, goToSlide, isClient]);
 
   useEffect(() => {
-    if (options.loop) {
-      const timer = setInterval(goToPrevSlide, 5000);
-      return () => clearInterval(timer);
-    }
-  }, [goToPrevSlide, options.loop]);
+    if (!isClient || !options.loop) return;
+    const timer = setInterval(goToPrevSlide, 5000);
+    return () => clearInterval(timer);
+  }, [goToPrevSlide, options.loop, isClient]);
 
   return (
     <div className='max-w-3xl px-4 py-8 mx-auto'>

@@ -1,4 +1,6 @@
 ---
+interface Props {}
+
 interface Testimonial {
     name: string;
     text?: string;
@@ -31,106 +33,85 @@ const testimonials: Testimonial[] = [
 ---
 
 <script>
-// Define the types for TypeScript
-type LightboxElements = {
-    lightbox: HTMLElement | null;
-    lightboxImg: HTMLImageElement | null;
-};
-
-// Function to get lightbox elements
-const getLightboxElements = (): LightboxElements => ({
-    lightbox: document.getElementById('lightbox'),
-    lightboxImg: document.getElementById('lightbox-img') as HTMLImageElement | null
-});
-
-// Function to open lightbox
-const openLightbox = (src: string): void => {
-    const { lightbox, lightboxImg } = getLightboxElements();
-    
-    if (lightbox && lightboxImg) {
-        lightboxImg.src = src;
-        lightbox.classList.remove('hidden');
-        // Prevent body scroll
-        document.body.style.overflow = 'hidden';
+    declare global {
+        interface HTMLElementEventMap {
+            'click': MouseEvent;
+        }
     }
-};
 
-// Function to close lightbox
-const closeLightbox = (): void => {
-    const { lightbox, lightboxImg } = getLightboxElements();
-    if (lightbox) {
-        lightbox.classList.add('hidden');
-        // Re-enable body scroll
-        document.body.style.overflow = '';
-        // Clear image src after animation
-        if (lightboxImg) {
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightbox-img') as HTMLImageElement | null;
+    const closeBtn = document.getElementById('lightbox-close');
+
+    function openLightbox(src: string) {
+        if (lightbox && lightboxImg) {
+            lightboxImg.src = src;
+            lightbox.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+    }
+
+    function closeLightbox() {
+        if (lightbox && lightboxImg) {
+            lightbox.classList.add('hidden');
+            document.body.style.overflow = '';
             setTimeout(() => {
                 lightboxImg.src = '';
             }, 300);
         }
     }
-};
 
-// Initialize lightbox functionality
-document.addEventListener('DOMContentLoaded', () => {
-    // Add click handlers to all screenshot images
-    document.querySelectorAll('.screenshot').forEach((img) => {
-        img.addEventListener('click', (e) => {
-            const target = e.target as HTMLImageElement;
-            if (target.src) {
-                openLightbox(target.src);
-            }
+    document.addEventListener('DOMContentLoaded', () => {
+        document.querySelectorAll('.screenshot').forEach((img) => {
+            img.addEventListener('click', (e) => {
+                const target = e.target as HTMLImageElement;
+                if (target.src) {
+                    openLightbox(target.src);
+                }
+            });
         });
-    });
 
-    // Add click handler to close lightbox
-    const lightbox = document.getElementById('lightbox');
-    const closeBtn = document.getElementById('lightbox-close');
-    
-    if (lightbox) {
-        lightbox.addEventListener('click', (e) => {
-            if (e.target === lightbox) {
+        if (lightbox) {
+            lightbox.addEventListener('click', (e) => {
+                if (e.target === lightbox) {
+                    closeLightbox();
+                }
+            });
+        }
+
+        if (closeBtn) {
+            closeBtn.addEventListener('click', closeLightbox);
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
                 closeLightbox();
             }
         });
-    }
-
-    if (closeBtn) {
-        closeBtn.addEventListener('click', closeLightbox);
-    }
-
-    // Add keyboard event listener for Escape key
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') {
-            closeLightbox();
-        }
     });
-});
 </script>
 
 <section class="testimonials">
     <div class="container">
         <h2 class="text-[--primary-dark]">מה הלקוחות אומרים</h2>
         <div class="testimonials-grid">
-            {
-                testimonials.map((testimonial) => (
-                    <div class="testimonial-card">
-                        {testimonial.screenshot ? (
-                            <img
-                                src={testimonial.screenshot}
-                                alt={`Testimonial from ${testimonial.name}`}
-                                class="screenshot"
-                            />
-                        ) : (
-                            <p class="text">"{testimonial.text}"</p>
-                        )}
-                        <div class="author">
-                            <strong>{testimonial.name}</strong>
-                            {testimonial.role && <span>{testimonial.role}</span>}
-                        </div>
+            {testimonials.map((testimonial) => (
+                <div class="testimonial-card">
+                    {testimonial.screenshot ? (
+                        <img
+                            src={testimonial.screenshot}
+                            alt={`Testimonial from ${testimonial.name}`}
+                            class="screenshot"
+                        />
+                    ) : (
+                        <p class="text">"{testimonial.text}"</p>
+                    )}
+                    <div class="author">
+                        <strong>{testimonial.name}</strong>
+                        {testimonial.role && <span>{testimonial.role}</span>}
                     </div>
-                ))
-            }
+                </div>
+            ))}
         </div>
     </div>
 
@@ -145,13 +126,6 @@ document.addEventListener('DOMContentLoaded', () => {
     .testimonials {
         padding: 5rem 0;
         background: var(--background);
-    }
-    .screenshot {
-        width: 100%;
-        border-radius: 8px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        margin-bottom: 1.5rem;
-        cursor: pointer;
     }
 
     .container {
@@ -193,6 +167,14 @@ document.addEventListener('DOMContentLoaded', () => {
     .author span {
         color: #666;
         font-size: 0.9rem;
+    }
+
+    .screenshot {
+        width: 100%;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        margin-bottom: 1.5rem;
+        cursor: pointer;
     }
 
     .lightbox {

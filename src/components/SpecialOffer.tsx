@@ -13,7 +13,7 @@ const SpecialOffer: FC = () => {
         עבורך פינת טבע מרגיעה בהתאמה אישית לבית או למשרד שלך!
       </p>
       <div className='text-center'>
-        <ContactDrawer triggerText='קבל ייעוץ חינם'  />
+        <ContactDrawer triggerText='קבל ייעוץ חינם' />
       </div>
     </section>
   );
