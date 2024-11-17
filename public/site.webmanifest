@@ -1,0 +1,18 @@
+{
+  "name": "אקווה גיק - פתרונות מקצועיים לאקווריומים",
+  "short_name": "אקווה גיק",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ],
+  "theme_color": "#3182ce",
+  "background_color": "#ffffff",
+  "display": "standalone",
+  "start_url": "/",
+  "orientation": "portrait",
+  "dir": "rtl",
+  "lang": "he"
+}

@@ -59,6 +59,27 @@ export default function Carousel({ options = { loop: true } }) {
     return () => clearInterval(timer);
   }, [goToPrevSlide, options.loop, isClient]);
 
+  if (!isClient) {
+    return (
+      <div className='max-w-3xl px-4 py-8 mx-auto'>
+        <h2 className='text-[2.5rem] text-center text-[--primary-dark] mb-6'>
+          גלריית פרויקטים שלנו: דוגמאות נבחרות מהעיצובים המרהיבים שלנו
+        </h2>
+        <div className='relative overflow-hidden aspect-video'>
+          <div className='flex h-full'>
+            <div className='flex-shrink-0 w-full h-full'>
+              <img
+                src={images[0].src}
+                alt={images[0].alt}
+                className='object-cover w-full h-full rounded-lg'
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className='max-w-3xl px-4 py-8 mx-auto'>
       <h2 className='text-[2.5rem] text-center text-[--primary-dark] mb-6'>
@@ -100,18 +121,19 @@ export default function Carousel({ options = { loop: true } }) {
             ›
           </button>
         </div>
-      </div>
-      <div className='flex justify-center gap-2 mt-4'>
-        {images.map((_, index) => (
-          <button
-            key={index}
-            className={`w-3 h-3 rounded-full p-0 ${
-              currentIndex === index ? 'bg-[--primary-dark]' : 'bg-gray-300'
-            }`}
-            onClick={() => goToSlide(index)}
-            aria-label={`Go to slide ${index + 1}`}
-          />
-        ))}
+
+        <div className='absolute bottom-4 left-0 right-0 flex justify-center gap-2'>
+          {images.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => goToSlide(index)}
+              className={`w-2 h-2 rounded-full transition-colors ${
+                index === currentIndex ? 'bg-white' : 'bg-white/50'
+              }`}
+              aria-label={`Go to slide ${index + 1}`}
+            />
+          ))}
+        </div>
       </div>
     </div>
   );

@@ -4,7 +4,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@radix-ui/react-accordion';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { FiChevronDown, FiChevronUp } from 'react-icons/fi';
 
 const faqs = [
@@ -31,12 +31,12 @@ const faqs = [
 ];
 
 const FAQ = () => {
-  // Return early if we're on the server
-  if (typeof window === 'undefined') {
-    return null;
-  }
+  const [isClient, setIsClient] = useState(false);
+  const [openItems, setOpenItems] = useState({});
 
-  const [openItems, setOpenItems] = React.useState({});
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   const handleToggle = (index) => {
     setOpenItems((prev) => ({
@@ -44,6 +44,25 @@ const FAQ = () => {
       [index]: !prev[index],
     }));
   };
+
+  if (!isClient) {
+    return (
+      <section className='my-8'>
+        <h2 className='text-[2.5rem] text-center text-[--primary-dark] mb-4'>
+          שאלות נפוצות
+        </h2>
+        <div className='space-y-4'>
+          {faqs.map((faq, index) => (
+            <div key={index} className='p-4 transition duration-300 bg-white rounded-lg shadow-md hover:shadow-lg'>
+              <div className='flex items-center justify-between text-xl font-bold text-[--primary]'>
+                <span>{faq.question}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className='my-8'>

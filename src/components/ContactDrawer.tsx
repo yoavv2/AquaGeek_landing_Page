@@ -25,6 +25,7 @@ const ContactDrawer: React.FC<ContactDrawerProps> = ({
   triggerText,
   buttonClassName,
 }) => {
+  const [isClient, setIsClient] = useState(false);
   const [showModal, setShowModal] = useState<boolean>(false);
   const [isMobile, setIsMobile] = useState<boolean>(false);
   const [formData, setFormData] = useState<FormData>({
@@ -35,103 +36,64 @@ const ContactDrawer: React.FC<ContactDrawerProps> = ({
   });
 
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const handleResize = () => {
-        setIsMobile(window.innerWidth <= 768);
-      };
-      handleResize();
-      window.addEventListener('resize', handleResize);
-      return () => window.removeEventListener('resize', handleResize);
-    }
+    setIsClient(true);
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
 
   const handleInputChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
+    setFormData((prev) => ({
+      ...prev,
       [name]: value,
     }));
   };
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    let isSuccess = false;
+    if (!isClient) return;
 
     try {
-      const baseId: string = import.meta.env.PUBLIC_AIRTABLE_BASE_ID as string;
-      const tableName: string = import.meta.env
-        .PUBLIC_AIRTABLE_TABLE_NAME as string;
-      const apiKey: string = import.meta.env.PUBLIC_AIRTABLE_API_KEY as string;
+      // Here you would typically send the form data to your backend
+      console.log('Form submitted:', formData);
 
-      const airtableResponse = await fetch(
-        `https://api.airtable.com/v0/${baseId}/${tableName}`,
-        {
-          method: 'POST',
-          headers: {
-            Authorization: `Bearer ${apiKey}`,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            fields: {
-              Name: formData.name,
-              Email: formData.email,
-              Phone: formData.phone,
-              Message: formData.message,
-            },
-          }),
-        }
-      );
-
-      if (airtableResponse.ok) {
-        isSuccess = true;
-      } else {
-        const errorData = await airtableResponse.json();
-        console.error('Error details:', errorData);
-      }
-    } catch (error) {
-      console.error('Error submitting the form to Airtable:', error);
-    }
-
-    try {
-      const webhookUrl = import.meta.env.PUBLIC_WEBHOOK_URL as string;
-      if (!webhookUrl) {
-        throw new Error('Webhook URL is not defined.');
-      }
-
-      const webhookResponse = await fetch(webhookUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
-
-      if (webhookResponse.ok) {
-        isSuccess = true;
-      } else {
-        console.error(
-          'Error sending data to webhook:',
-          await webhookResponse.text()
-        );
-      }
-    } catch (error) {
-      console.error('Error submitting the form to webhook:', error);
-    }
-
-    if (isSuccess) {
-      setFormData({ name: '', email: '', phone: '', message: '' });
-      setShowModal(false);
+      // Show success animation
       confetti({
-        particleCount: 150,
+        particleCount: 100,
         spread: 70,
         origin: { y: 0.6 },
       });
-    } else {
-      alert('שגיאה בשליחת הטופס, נסה שנית.');
+
+      // Reset form and close modal
+      setFormData({
+        name: '',
+        email: '',
+        phone: '',
+        message: '',
+      });
+      setShowModal(false);
+    } catch (error) {
+      console.error('Error submitting form:', error);
     }
   };
+
+  if (!isClient) {
+    return (
+      <button
+        className={
+          buttonClassName || 'px-4 py-2 text-white bg-blue-500 rounded'
+        }
+      >
+        {triggerText}
+      </button>
+    );
+  }
 
   return (
     <Drawer open={showModal} onClose={() => setShowModal(false)}>
@@ -157,7 +119,7 @@ const ContactDrawer: React.FC<ContactDrawerProps> = ({
         {isMobile ? (
           <div className='mx-auto mt-4 h-1 w-[100px] rounded-full bg-gray-300' />
         ) : null}
-        <div className='w-full max-w-lg p-8 mx-auto bg-white rounded-lg'>
+        <div className='p-8 mx-auto w-full max-w-lg bg-white rounded-lg'>
           <DrawerClose asChild>
             <span
               className='float-right text-2xl font-bold text-gray-600 cursor-pointer hover:text-gray-900'
@@ -169,52 +131,69 @@ const ContactDrawer: React.FC<ContactDrawerProps> = ({
           <h3 className='mb-6 text-3xl font-semibold text-center text-gray-800'>
             השאר פרטים
           </h3>
-          <form onSubmit={handleSubmit}>
-            <input
-              type='text'
-              id='name'
-              name='name'
-              placeholder='איך תרצה שנקרא לך?'
-              required
-              value={formData.name}
-              onChange={handleInputChange}
-              className='w-full p-3 mb-4 text-gray-900 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500'
-            />
-
-            <input
-              type='email'
-              id='email'
-              name='email'
-              placeholder='כתובת המייל לקבלת עדכונים'
-              required
-              value={formData.email}
-              onChange={handleInputChange}
-              className='w-full p-3 mb-4 text-gray-900 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500'
-            />
-
-            <input
-              type='tel'
-              id='phone'
-              name='phone'
-              placeholder='מספר נייד לייעוץ מהיר'
-              required
-              value={formData.phone}
-              onChange={handleInputChange}
-              className='w-full p-3 mb-4 text-gray-900 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500'
-              style={{ textAlign: 'right' }}
-            />
-
-            <textarea
-              id='message'
-              name='message'
-              placeholder='איך נוכל לעזור? שתף אותנו בכל מה שבא לך'
-              value={formData.message}
-              onChange={handleInputChange}
-              className='w-full p-3 mb-4 text-gray-900 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500'
-            ></textarea>
+          <form onSubmit={handleSubmit} className='space-y-4'>
+            <div>
+              <label htmlFor='name' className='block mb-1 font-medium'>
+                שם מלא
+              </label>
+              <input
+                type='text'
+                id='name'
+                name='name'
+                required
+                value={formData.name}
+                onChange={handleInputChange}
+                className='px-3 py-2 w-full rounded-md border'
+                dir='rtl'
+              />
+            </div>
+            <div>
+              <label htmlFor='email' className='block mb-1 font-medium'>
+                אימייל
+              </label>
+              <input
+                type='email'
+                id='email'
+                name='email'
+                required
+                value={formData.email}
+                onChange={handleInputChange}
+                className='px-3 py-2 w-full rounded-md border'
+                dir='rtl'
+              />
+            </div>
+            <div>
+              <label htmlFor='phone' className='block mb-1 font-medium'>
+                טלפון
+              </label>
+              <input
+                type='tel'
+                id='phone'
+                name='phone'
+                required
+                value={formData.phone}
+                onChange={handleInputChange}
+                className='px-3 py-2 w-full rounded-md border'
+                dir='rtl'
+              />
+            </div>
+            <div>
+              <label htmlFor='message' className='block mb-1 font-medium'>
+                הודעה
+              </label>
+              <textarea
+                id='message'
+                name='message'
+                rows={4}
+                value={formData.message}
+                onChange={handleInputChange}
+                className='px-3 py-2 w-full rounded-md border'
+                dir='rtl'
+              />
+            </div>
             <button
               type='submit'
-              className='w-full px-6 py-3 mt-4 font-semibold text-white transition-all bg-gradient-to-r from-blue-700 to-green-500 rounded-md hover:bg-[--primary-dark] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2'
+              className='w-full px-4 py-2 text-white bg-[--primary] rounded-md hover:bg-[--primary-dark] transition-colors'
             >
               שלח
             </button>
