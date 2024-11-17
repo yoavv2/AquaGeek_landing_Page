@@ -1,84 +1,263 @@
 ---
-const testimonials = [
-	{
-		name: 'דני כהן',
-		text: 'השירות המקצועי והאדיב של אקווה גיק עזר לי לשמור על האקווריום שלי במצב מושלם.',
-		role: 'בעל אקווריום מים מתוקים'
-	},
-	{
-		name: 'מיכל לוי',
-		text: 'הצוות המקצועי והידע הרב שלהם עזרו לי להקים את האקווריום המושלם.',
-		role: 'בעלת אקווריום שונית'
-	},
-	{
-		name: 'יוסי אברהם',
-		text: 'המחירים הוגנים והשירות מעולה. ממליץ בחום!',
-		role: 'לקוח ותיק'
-	}
+interface Testimonial {
+    name: string;
+    text?: string;
+    role?: string;
+    screenshot?: string;
+}
+
+const testimonials: Testimonial[] = [
+    {
+        name: 'נועה זגורי',
+        text: 'תותח! שירות מצויין ומקצועי!! מומלץ בחום',
+        role: ''
+    },
+    {
+        name: 'נתנאל',
+        text: 'ממליץ מאוד על השירות של אסף נותן הדרכה מלאה בצורה מקצועית ועיניינית ותמיד זמין לכל שאלה בכל זמן',
+        role: 'בעל אקווריום ריף'
+    },
+    {
+        name: 'חיים יעקב',
+        text: 'אסף קודם כל איש נפלא, מקצוען אמיתי ואמין, אנחנו ממליצים',
+        role: 'לקוח ותיק'
+    },
+    {
+        name: 'Screenshot Example',
+        screenshot: '/testimonial_screenshot.png',
+        role: 'לקוח מאושר'
+    }
 ];
 ---
 
+<script>
+// Define the types for TypeScript
+type LightboxElements = {
+    lightbox: HTMLElement | null;
+    lightboxImg: HTMLImageElement | null;
+};
+
+// Function to get lightbox elements
+const getLightboxElements = (): LightboxElements => ({
+    lightbox: document.getElementById('lightbox'),
+    lightboxImg: document.getElementById('lightbox-img') as HTMLImageElement | null
+});
+
+// Function to open lightbox
+const openLightbox = (src: string): void => {
+    const { lightbox, lightboxImg } = getLightboxElements();
+    
+    if (lightbox && lightboxImg) {
+        lightboxImg.src = src;
+        lightbox.classList.remove('hidden');
+        // Prevent body scroll
+        document.body.style.overflow = 'hidden';
+    }
+};
+
+// Function to close lightbox
+const closeLightbox = (): void => {
+    const { lightbox, lightboxImg } = getLightboxElements();
+    if (lightbox) {
+        lightbox.classList.add('hidden');
+        // Re-enable body scroll
+        document.body.style.overflow = '';
+        // Clear image src after animation
+        if (lightboxImg) {
+            setTimeout(() => {
+                lightboxImg.src = '';
+            }, 300);
+        }
+    }
+};
+
+// Initialize lightbox functionality
+document.addEventListener('DOMContentLoaded', () => {
+    // Add click handlers to all screenshot images
+    document.querySelectorAll('.screenshot').forEach((img) => {
+        img.addEventListener('click', (e) => {
+            const target = e.target as HTMLImageElement;
+            if (target.src) {
+                openLightbox(target.src);
+            }
+        });
+    });
+
+    // Add click handler to close lightbox
+    const lightbox = document.getElementById('lightbox');
+    const closeBtn = document.getElementById('lightbox-close');
+    
+    if (lightbox) {
+        lightbox.addEventListener('click', (e) => {
+            if (e.target === lightbox) {
+                closeLightbox();
+            }
+        });
+    }
+
+    if (closeBtn) {
+        closeBtn.addEventListener('click', closeLightbox);
+    }
+
+    // Add keyboard event listener for Escape key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            closeLightbox();
+        }
+    });
+});
+</script>
+
 <section class="testimonials">
-	<div class="container">
-		<h2 class='text-[--primary-dark]'>מה הלקוחות אומרים</h2>
-		<div class="testimonials-grid">
-			{testimonials.map(testimonial => (
-				<div class="testimonial-card">
-					<p class="text">"{testimonial.text}"</p>
-					<div class="author">
-						<strong>{testimonial.name}</strong>
-						<span>{testimonial.role}</span>
-					</div>
-				</div>
-			))}
-		</div>
-	</div>
+    <div class="container">
+        <h2 class="text-[--primary-dark]">מה הלקוחות אומרים</h2>
+        <div class="testimonials-grid">
+            {
+                testimonials.map((testimonial) => (
+                    <div class="testimonial-card">
+                        {testimonial.screenshot ? (
+                            <img
+                                src={testimonial.screenshot}
+                                alt={`Testimonial from ${testimonial.name}`}
+                                class="screenshot"
+                            />
+                        ) : (
+                            <p class="text">"{testimonial.text}"</p>
+                        )}
+                        <div class="author">
+                            <strong>{testimonial.name}</strong>
+                            {testimonial.role && <span>{testimonial.role}</span>}
+                        </div>
+                    </div>
+                ))
+            }
+        </div>
+    </div>
+
+    <!-- Lightbox -->
+    <div id="lightbox" class="hidden lightbox">
+        <button id="lightbox-close" class="lightbox-close" aria-label="Close lightbox">×</button>
+        <img id="lightbox-img" src="" alt="Full-size testimonial screenshot" />
+    </div>
 </section>
 
 <style>
-	.testimonials {
-		padding: 5rem 0;
-		background: var(--background);
-	}
+    .testimonials {
+        padding: 5rem 0;
+        background: var(--background);
+    }
+    .screenshot {
+        width: 100%;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        margin-bottom: 1.5rem;
+        cursor: pointer;
+    }
 
-	.container {
-		max-width: 1200px;
-		margin: 0 auto;
-		padding: 0 1rem;
-	}
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 1rem;
+    }
 
-	h2 {
-		text-align: center;
-		font-size: 2.5rem;
-		margin-bottom: 3rem;
-	}
+    h2 {
+        text-align: center;
+        font-size: 2.5rem;
+        margin-bottom: 3rem;
+    }
 
-	.testimonials-grid {
-		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-		gap: 2rem;
-	}
+    .testimonials-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+    }
 
-	.testimonial-card {
-		background: white;
-		padding: 2rem;
-		border-radius: 8px;
-		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-	}
+    .testimonial-card {
+        background: white;
+        padding: 2rem;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
 
-	.text {
-		font-style: italic;
-		margin-bottom: 1.5rem;
-	}
+    .text {
+        font-style: italic;
+        margin-bottom: 1.5rem;
+    }
 
-	.author {
-		display: flex;
-		flex-direction: column;
-		gap: 0.25rem;
-	}
+    .author {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+    }
 
-	.author span {
-		color: #666;
-		font-size: 0.9rem;
-	}
+    .author span {
+        color: #666;
+        font-size: 0.9rem;
+    }
+
+    .lightbox {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.95);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 99999;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .lightbox:not(.hidden) {
+        opacity: 1;
+    }
+
+    .lightbox img {
+        max-width: 95%;
+        max-height: 95vh;
+        border-radius: 8px;
+        transform: scale(0.95);
+        transition: transform 0.3s ease;
+    }
+
+    .lightbox:not(.hidden) img {
+        transform: scale(1);
+    }
+
+    .lightbox.hidden {
+        display: none;
+    }
+
+    .lightbox-close {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: white;
+        border: none;
+        cursor: pointer;
+        font-size: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background-color 0.3s ease;
+        z-index: 100000;
+    }
+
+    .lightbox-close:hover {
+        background-color: #f0f0f0;
+    }
+
+    @media (max-width: 768px) {
+        .lightbox-close {
+            top: 10px;
+            right: 10px;
+            width: 35px;
+            height: 35px;
+        }
+    }
 </style>
