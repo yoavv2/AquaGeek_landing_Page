@@ -1,10 +1,11 @@
 ---
-const whatsappNumber = "+972526383226"; // Replace with your WhatsApp number
-const whatsappMessage = "היי, אשמח לקבל פרטים נוספים על השירותים שלכם"; // Default message
+import { contactConfig } from '../config/contact';
+
+const { number, message } = contactConfig.whatsapp;
 ---
 
 <a
-    href={`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappMessage)}`}
+    href={`https://wa.me/${number}?text=${encodeURIComponent(message)}`}
     class="whatsapp-float"
     target="_blank"
     rel="noopener noreferrer"

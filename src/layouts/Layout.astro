@@ -1,62 +1,146 @@
 ---
 interface Props {
 	title: string;
+	description?: string;
 }
 
-const { title } = Astro.props;
+const { 
+	title,
+	description = 'אקווה גיק - פתרונות מקצועיים לאקווריומים, כולל עיצוב, תחזוקה וייעוץ אישי למגוון סוגי אקווריומים.'
+} = Astro.props;
+
+const socialImage = 'https://aqua-geek-landing-page.vercel.app/coral-hero-bg4.png?v=1';
+const siteUrl = 'https://aqua-geek-landing-page.vercel.app';
 ---
 
 <!doctype html>
 <html lang="he" dir="rtl">
 	<head>
 		<meta charset="UTF-8" />
-		<meta name="description" content="אקווה גיק - פתרונות מקצועיים לאקווריומים" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta name="description" content={description} />
+		<meta name="keywords" content="אקווריום, אקווריומים, דגים, אקווה גיק, תחזוקת אקווריום, עיצוב אקווריום, ייעוץ אקווריום, אקווריום מים מלוחים, אקווריום מים מתוקים" />
+		<meta name="author" content="אקווה גיק" />
+		<meta name="robots" content="index, follow" />
+
 		<!-- Open Graph meta tags for link preview -->
 		<meta property="fb:app_id" content="1268336434581614" />
 		<meta property="og:title" content={title} />
-		<meta property="og:description" content="אקווה גיק - פתרונות מקצועיים לאקווריומים" />
-		<meta property="og:image" content="https://aqua-geek-landing-page.vercel.app/coral-hero-bg4.png?v=1" />
-		<meta property="og:url" content="https://aqua-geek-landing-page.vercel.app" />
+		<meta property="og:description" content={description} />
+		<meta property="og:image" content={socialImage} />
+		<meta property="og:url" content={siteUrl} />
 		<meta property="og:type" content="website" />
 		<meta property="og:image:width" content="1200" />
 		<meta property="og:image:height" content="630" />
 		<meta property="og:locale" content="he_IL" />
 		<meta property="og:site_name" content="אקווה גיק" />
+
 		<!-- Twitter Card meta tags -->
 		<meta name="twitter:card" content="summary_large_image" />
 		<meta name="twitter:title" content={title} />
-		<meta name="twitter:description" content="אקווה גיק - פתרונות מקצועיים לאקווריומים" />
-		<meta name="twitter:image" content="https://aqua-geek-landing-page.vercel.app/coral-hero-bg4.png?v=1" />
+		<meta name="twitter:description" content={description} />
+		<meta name="twitter:image" content={socialImage} />
 		<meta name="twitter:site" content="@aqua_geek" />
 		<meta name="twitter:creator" content="@aqua_geek" />
 
 		<!-- Canonical URL -->
-		<link rel="canonical" href="https://aqua-geek-landing-page.vercel.app" />
+		<link rel="canonical" href={siteUrl} />
 
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" sizes="32x32" href="https://aqua-geek-landing-page.vercel.app/coral-hero-bg4.png?v=1" />
+		<!-- Favicon -->
+		<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+		<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+		<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+		<link rel="manifest" href="/site.webmanifest" />
+		<meta name="theme-color" content="#3182ce" />
 
 		<meta name="generator" content={Astro.generator} />
 		<title>{title}</title>
 
-		<!-- Structured Data for SEO -->
+		<!-- Structured Data for Local Business -->
 		<script type="application/ld+json">
-		{
-		  "@context": "https://schema.org",
-		  "@type": "LocalBusiness",
-		  "name": "אקווה גיק",
-		  "url": "https://aqua-geek-landing-page.vercel.app",
-		  "description": "אקווה גיק - פתרונות מקצועיים לאקווריומים, כולל עיצוב, תחזוקה וייעוץ אישי.",
-		  "logo": "https://aqua-geek-landing-page.vercel.app/AquaGeek_Logo.png",
-		  "sameAs": [
-		    "https://www.instagram.com/aquageeks/",
-		    "https://www.facebook.com/profile.php?id=100057490747892"
-		  ],
-		  "address": {
-		    "@type": "PostalAddress",
-		    "addressCountry": "IL"
-		  }
-		}
+			{
+				"@context": "https://schema.org",
+				"@type": "LocalBusiness",
+				"name": "אקווה גיק",
+				"image": ["https://aqua-geek-landing-page.vercel.app/coral-hero-bg4.png?v=1"],
+				"@id": "https://aqua-geek-landing-page.vercel.app",
+				"url": "https://aqua-geek-landing-page.vercel.app",
+				"telephone": "+972526383226",
+				"priceRange": "₪₪-₪₪₪₪",
+				"description": "אקווה גיק - פתרונות מקצועיים לאקווריומים, כולל עיצוב, תחזוקה וייעוץ אישי.",
+				"logo": "https://aqua-geek-landing-page.vercel.app/AquaGeek_Logo.png",
+				"sameAs": [
+					"https://www.instagram.com/aquageeks/",
+					"https://www.facebook.com/profile.php?id=100057490747892"
+				],
+				"address": {
+					"@type": "PostalAddress",
+					"addressCountry": "IL",
+					"addressRegion": "Israel"
+				},
+				"geo": {
+					"@type": "GeoCoordinates",
+					"latitude": "31.7767",
+					"longitude": "35.2345"
+				},
+				"openingHoursSpecification": {
+					"@type": "OpeningHoursSpecification",
+					"dayOfWeek": [
+						"Sunday",
+						"Monday",
+						"Tuesday",
+						"Wednesday",
+						"Thursday"
+					],
+					"opens": "09:00",
+					"closes": "18:00"
+				},
+				"areaServed": "Israel"
+			}
+		</script>
+
+		<!-- Structured Data for Service -->
+		<script type="application/ld+json">
+			{
+				"@context": "https://schema.org",
+				"@type": "Service",
+				"serviceType": "Aquarium Services",
+				"provider": {
+					"@type": "LocalBusiness",
+					"name": "אקווה גיק"
+				},
+				"areaServed": "Israel",
+				"hasOfferCatalog": {
+					"@type": "OfferCatalog",
+					"name": "Aquarium Services",
+					"itemListElement": [
+						{
+							"@type": "Offer",
+							"itemOffered": {
+								"@type": "Service",
+								"name": "תחזוקת אקווריום",
+								"description": "שירותי תחזוקה שוטפת לאקווריומים"
+							}
+						},
+						{
+							"@type": "Offer",
+							"itemOffered": {
+								"@type": "Service",
+								"name": "עיצוב אקווריום",
+								"description": "תכנון ועיצוב אקווריומים מותאמים אישית"
+							}
+						},
+						{
+							"@type": "Offer",
+							"itemOffered": {
+								"@type": "Service",
+								"name": "ייעוץ אקווריום",
+								"description": "ייעוץ מקצועי להקמה ותחזוקת אקווריומים"
+							}
+						}
+					]
+				}
+			}
 		</script>
 	</head>
 	<body>
