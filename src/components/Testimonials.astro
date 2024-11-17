@@ -31,17 +31,35 @@ const testimonials: Testimonial[] = [
         role: 'בעלת אקווריום מים מתוקים'
     }
 ];
+
+// Function to generate a consistent avatar URL for each name
+function getAvatarUrl(name: string) {
+    const seed = encodeURIComponent(name);
+    return `https://api.dicebear.com/7.x/adventurer/svg?seed=${seed}&backgroundColor=b6e3f4`;
+}
 ---
 
 <section class="testimonials">
     <div class="container">
         <h2 class="text-[2.5rem] text-center text-[--primary-dark] mb-12">מה הלקוחות אומרים</h2>
         <div class="whatsapp-chat">
-            {testimonials.map((testimonial) => (
-                <div class="message-group">
+            {testimonials.map((testimonial, index) => (
+                <div class={`message-group ${index > 0 ? 'mt-8' : ''}`}>
+                    <div class="date-separator">
+                        <span>{index === 0 ? 'היום' : 'אתמול'}</span>
+                    </div>
                     <div class="message-info">
-                        <strong class="name">{testimonial.name}</strong>
-                        {testimonial.role && <span class="role">{testimonial.role}</span>}
+                        <img 
+                            src={getAvatarUrl(testimonial.name)}
+                            alt={`Avatar of ${testimonial.name}`}
+                            class="avatar"
+                            width="40"
+                            height="40"
+                        />
+                        <div class="name-role">
+                            <strong class="name">{testimonial.name}</strong>
+                            {testimonial.role && <span class="role">{testimonial.role}</span>}
+                        </div>
                     </div>
                     <div class="message">
                         <p class="text">{testimonial.text}</p>
@@ -58,6 +76,7 @@ const testimonials: Testimonial[] = [
         padding: 5rem 0;
         background-color: #efeae2;
         min-height: 50dvh;
+        direction: rtl;
     }
 
     .container {
@@ -69,7 +88,7 @@ const testimonials: Testimonial[] = [
     .whatsapp-chat {
         display: flex;
         flex-direction: column;
-        gap: 2rem;
+        gap: 1rem;
     }
 
     .message-group {
@@ -77,13 +96,43 @@ const testimonials: Testimonial[] = [
         flex-direction: column;
         gap: 0.5rem;
         align-items: flex-start;
+        position: relative;
+    }
+
+    .date-separator {
+        text-align: center;
+        width: 100%;
+        margin: 1rem 0;
+    }
+
+    .date-separator span {
+        background-color: #e1f2fa;
+        padding: 0.5rem 1rem;
+        border-radius: 0.5rem;
+        font-size: 0.75rem;
+        color: #667781;
+        box-shadow: 0 1px 0.5px rgba(0, 0, 0, 0.13);
     }
 
     .message-info {
         display: flex;
         align-items: center;
-        gap: 0.5rem;
+        gap: 0.75rem;
         padding: 0 1rem;
+    }
+
+    .avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background-color: #e1f2fa;
+        box-shadow: 0 1px 0.5px rgba(0, 0, 0, 0.13);
+    }
+
+    .name-role {
+        display: flex;
+        flex-direction: column;
+        gap: 0.125rem;
     }
 
     .name {
@@ -103,13 +152,14 @@ const testimonials: Testimonial[] = [
         position: relative;
         max-width: 80%;
         box-shadow: 0 1px 0.5px rgba(0, 0, 0, 0.13);
+        margin-right: 3.5rem;
     }
 
     .message::before {
         content: "";
         position: absolute;
-        top: 0;
-        right: 100%;
+        top: 0.8px;
+        left: -6px;
         border: 8px solid transparent;
         border-left: none;
         border-right-color: white;
@@ -133,6 +183,11 @@ const testimonials: Testimonial[] = [
     @media (max-width: 640px) {
         .message {
             max-width: 90%;
+        }
+
+        .avatar {
+            width: 32px;
+            height: 32px;
         }
     }
 </style>
