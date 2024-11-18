@@ -3,6 +3,7 @@ interface Props {}
 
 interface Testimonial {
     name: string;
+    avatar: string
     text?: string;
     role?: string;
     screenshot?: string;
@@ -12,31 +13,31 @@ const testimonials: Testimonial[] = [
     {
         name: 'נועה זגורי',
         text: 'תותח! שירות מצויין ומקצועי!! מומלץ בחום',
-        role: ''
+        role: '',
+     avatar:'https://api.dicebear.com/9.x/adventurer/svg?seed=Aiden&hair=long01'
     },
     {
         name: 'נתנאל',
         text: 'ממליץ מאוד על השירות של אסף נותן הדרכה מלאה בצורה מקצועית ועיניינית ותמיד זמין לכל שאלה בכל זמן',
-        role: 'בעל אקווריום ריף'
+        role: 'בעל אקווריום ריף',
+        avatar:'https://api.dicebear.com/9.x/adventurer/svg?seed=Jude&hair=short07'
     },
     {
         name: 'חיים יעקב',
         text: 'אסף קודם כל איש נפלא, מקצוען אמיתי ואמין, אנחנו ממליצים',
-        role: 'לקוח ותיק'
+        role: 'לקוח ותיק',
+        avatar:'https://api.dicebear.com/9.x/adventurer/svg?seed=Alexander&hair=short08'
     },
     {
         name: 'ישראלה אלפנדרי',
         text: `מרוצה מאוד מהשירות המקצועי ואדיב של אסף בנושא האקווריום...כמו כן ההסבר והסבלנות ללקוח...תמיד זמין לענות לשאלות...מגיע בזמן ובמועד שנקבע...
         לסיכום:...אדיב,  מקצועי,  מדייק ואוהב את עבודתו .. ולפיכך הלקוח רק מרוויח.`,    
-        role: 'בעלת אקווריום מים מתוקים'
+        role: 'בעלת אקווריום מים מתוקים',
+        avatar:'https://api.dicebear.com/9.x/adventurer/svg?seed=Kingston&hair=long06'
     }
 ];
 
-// Function to generate a consistent avatar URL for each name
-function getAvatarUrl(name: string) {
-    const seed = encodeURIComponent(name);
-    return `https://api.dicebear.com/7.x/adventurer/svg?seed=${seed}&backgroundColor=b6e3f4`;
-}
+
 ---
 
 <section class="testimonials">
@@ -50,7 +51,7 @@ function getAvatarUrl(name: string) {
                     </div>
                     <div class="message-info">
                         <img 
-                            src={getAvatarUrl(testimonial.name)}
+                            src={testimonial.avatar}
                             alt={`Avatar of ${testimonial.name}`}
                             class="avatar"
                             width="40"
@@ -88,15 +89,15 @@ function getAvatarUrl(name: string) {
     .whatsapp-chat {
         display: flex;
         flex-direction: column;
-        gap: 1rem;
+        
     }
 
     .message-group {
         display: flex;
         flex-direction: column;
-        gap: 0.5rem;
         align-items: flex-start;
         position: relative;
+        margin-bottom: 1rem;
     }
 
     .date-separator {
