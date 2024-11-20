@@ -7,6 +7,7 @@ import {
   DrawerContent,
   DrawerClose,
   DrawerOverlay,
+  DrawerTitle,
 } from './ui/Drawercontent';
 
 interface ContactDrawerProps {
@@ -122,75 +123,56 @@ const ContactDrawer: React.FC<ContactDrawerProps> = ({
         <div className='p-8 mx-auto w-full max-w-lg bg-white rounded-lg'>
           <DrawerClose asChild>
             <span
-              className='float-right text-2xl font-bold text-gray-600 cursor-pointer hover:text-gray-900'
+              className='float-right text-2xl text-gray-600 cursor-pointer hover:text-gray-900'
               onClick={() => setShowModal(false)}
             >
               &times;
             </span>
           </DrawerClose>
-          <h3 className='mb-6 text-3xl font-semibold text-center text-gray-800'>
-            השאר פרטים
-          </h3>
+          <DrawerTitle className='mb-6 text-3xl font-semibold text-center text-gray-800'>
+            השאר פרטים ונחזור אליך בהקדם
+          </DrawerTitle>
           <form onSubmit={handleSubmit} className='space-y-4'>
-            <div>
-              <label htmlFor='name' className='block mb-1 font-medium'>
-                שם מלא
-              </label>
-              <input
-                type='text'
-                id='name'
-                name='name'
-                required
-                value={formData.name}
-                onChange={handleInputChange}
-                className='px-3 py-2 w-full rounded-md border'
-                dir='rtl'
-              />
-            </div>
-            <div>
-              <label htmlFor='email' className='block mb-1 font-medium'>
-                אימייל
-              </label>
-              <input
-                type='email'
-                id='email'
-                name='email'
-                required
-                value={formData.email}
-                onChange={handleInputChange}
-                className='px-3 py-2 w-full rounded-md border'
-                dir='rtl'
-              />
-            </div>
-            <div>
-              <label htmlFor='phone' className='block mb-1 font-medium'>
-                טלפון
-              </label>
-              <input
-                type='tel'
-                id='phone'
-                name='phone'
-                required
-                value={formData.phone}
-                onChange={handleInputChange}
-                className='px-3 py-2 w-full rounded-md border'
-                dir='rtl'
-              />
-            </div>
-            <div>
-              <label htmlFor='message' className='block mb-1 font-medium'>
-                הודעה
-              </label>
-              <textarea
-                id='message'
-                name='message'
-                rows={4}
-                value={formData.message}
-                onChange={handleInputChange}
-                className='px-3 py-2 w-full rounded-md border'
-                dir='rtl'
-              />
-            </div>
+            <input
+              type='text'
+              id='name'
+              name='name'
+              placeholder='איך תרצה שנקרא לך?'
+              required
+              value={formData.name}
+              onChange={handleInputChange}
+              className='p-3 mb-4 w-full text-gray-900 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500'
+            />
+            <input
+              type='email'
+              id='email'
+              name='email'
+              placeholder='כתובת המייל לקבלת עדכונים'
+              required
+              value={formData.email}
+              onChange={handleInputChange}
+              className='p-3 mb-4 w-full text-gray-900 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500'
+            />
+            <input
+              type='tel'
+              id='phone'
+              name='phone'
+              placeholder='מספר נייד לייעוץ מהיר'
+              required
+              value={formData.phone}
+              onChange={handleInputChange}
+              className='p-3 mb-4 w-full text-gray-900 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500'
+              style={{ textAlign: 'right' }}
+            />
+            <textarea
+              id='message'
+              name='message'
+              placeholder='איך נוכל לעזור? שתף אותנו בכל מה שבא לך'
+              value={formData.message}
+              onChange={handleInputChange}
+              className='p-3 mb-4 w-full text-gray-900 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500'
+            ></textarea>
+
             <button
               type='submit'
               className='w-full px-4 py-2 text-white bg-[--primary] rounded-md hover:bg-[--primary-dark] transition-colors'
