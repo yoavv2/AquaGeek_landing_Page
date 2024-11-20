@@ -3,7 +3,7 @@ import ContactDrawer from './ContactDrawer';
 
 const SpecialOffer: FC = () => {
   return (
-    <section className='p-8 my-8 text-white rounded-lg shadow-lg bg-gradient-to-r from-blue-700 to-green-500'>
+    <section className='p-8 text-white bg-gradient-to-r from-blue-700 to-green-500 rounded-lg shadow-lg'>
       <h3 className='mb-4 text-3xl font-bold text-center'>
         הצעה מיוחדת – לזמן מוגבל בלבד!
       </h3>

@@ -1,47 +1,125 @@
 import React from 'react';
-import { Fish, Droplet, Heart } from 'lucide-react';
+import { Fish, Wrench, Package, HelpCircle } from 'lucide-react';
 
 const services = [
   {
-    title: 'אקווריומים ובריכות נוי בהתאמה אישית',
+    title: 'תכנון והקמת אקווריומים',
     description:
-      'כל מערכת מתוכננת בקפידה, משלבת צמחייה, דגים ובעלי חיים בהתאמה מדויקת. אנו מביאים אליך את השקט של עולם המים – בעיצוב שיתאים באופן מושלם למרחב שלך.',
-    icon: <Fish className='h-8 w-8 ml-1 text-[--primary]' />,
+      'עיצוב והתקנת אקווריומים מותאמים אישית לבתים פרטיים, משרדים, מסעדות וקליניקות. כולל ייעוץ מקצועי, בחירת ציוד, והתקנה מלאה.',
+    icon: <Fish className='h-8 w-8 text-[--primary]' />,
   },
   {
-    title: 'תחזוקה מקצועית לבריאות ויציבות המערכת',
+    title: 'שירותי תחזוקה',
     description:
-      'שירות התחזוקה השוטף שלנו כולל בדיקות מים מדויקות, טיפולים בציוד והתאמות לפי הצורך, כך שתוכל ליהנות ממערכת בריאה ומאוזנת לאורך זמן.',
-    icon: <Droplet className='h-8 w-8 ml-1 text-[--primary]' />,
+      'תחזוקה שוטפת ומקצועית של אקווריומים ובריכות נוי, כולל ניקוי, בדיקות מים, טיפול בדגים וצמחייה, ופתרון בעיות.',
+    icon: <Wrench className='h-8 w-8 text-[--primary]' />,
   },
   {
-    title: 'שירות אישי ומסור',
+    title: 'מכירת ציוד ואביזרים',
     description:
-      'מהשלב הראשון של התכנון ועד לתחזוקה השוטפת, אנו מלווים אותך במקצועיות ובמסירות. כל מה שצריך כדי שתוכל ליהנות ממערכת חיה ותוססת בביתך.',
-    icon: <Heart className='h-8 w-8 ml-1 text-[--primary]' />,
+      'מגוון רחב של ציוד איכותי לאקווריומים, כולל מסננים, תאורה, מזון לדגים, צמחים, ואביזרי עיצוב מהמותגים המובילים.',
+    icon: <Package className='h-8 w-8 text-[--primary]' />,
+  },
+  {
+    title: 'ייעוץ והדרכה',
+    description:
+      'ליווי מקצועי מקיף לבעלי אקווריומים, כולל הדרכה על תחזוקה נכונה, טיפול בדגים, ופתרון בעיות שכיחות.',
+    icon: <HelpCircle className='h-8 w-8 text-[--primary]' />,
   },
 ];
 
 const OurServices = () => {
   return (
-    <section className='my-8'>
-      <h2 className='text-[2.5rem]  text-center text-[--primary-dark] mb-4'>
-        מה תוכל למצוא אצלנו?
-      </h2>
-      <div className='grid gap-8 md:grid-cols-3'>
-        {services.map((service, index) => (
-          <div
-            key={index}
-            className='p-6 transition duration-300 bg-white rounded-lg shadow-md hover:shadow-lg'
-          >
-            <div className='flex items-center mb-4'>
-              {service.icon}
-              <h3 className=' text-[1.5rem] '>{service.title}</h3>
+    <section className='services'>
+      <div className='container'>
+        <h2>השירותים שלנו</h2>
+        <div className='services-grid'>
+          {services.map((service, index) => (
+            <div key={index} className='service-card'>
+              <div className='service-icon'>{service.icon}</div>
+              <div className='service-content'>
+                <h3>{service.title}</h3>
+                <p>{service.description}</p>
+              </div>
             </div>
-            <p className='text-gray-700'>{service.description}</p>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
+
+      <style jsx>{`
+        .services {
+          padding: 5rem 0;
+          background-color: var(--background);
+          direction: rtl;
+        }
+
+        .container {
+          max-width: 1200px;
+          margin: 0 auto;
+          padding: 0 1rem;
+        }
+
+        h2 {
+          text-align: center;
+          color: var(--primary-dark);
+          font-size: 2.5rem;
+          margin-bottom: 3rem;
+        }
+
+        .services-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(30px, 1fr));
+          gap: 2rem;
+        }
+
+        .service-card {
+          background: white;
+          border-radius: 1rem;
+          padding: 2rem;
+          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+          transition: transform 0.3s ease;
+        }
+
+        .service-card:hover {
+          transform: translateY(-5px);
+        }
+
+        .service-icon {
+          display: flex;
+          justify-content: center;
+          margin-bottom: 1.5rem;
+        }
+
+        .service-content {
+          text-align: center;
+        }
+
+        h3 {
+          color: var(--primary-dark);
+          font-size: 1.25rem;
+          margin-bottom: 1rem;
+        }
+
+        p {
+          color: var(--text);
+          line-height: 1.6;
+        }
+
+        @media (max-width: 768px) {
+          .services {
+            padding: 3rem 0;
+          }
+
+          h2 {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+          }
+
+          .services-grid {
+            grid-template-columns: 1fr;
+          }
+        }
+      `}</style>
     </section>
   );
 };
