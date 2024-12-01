@@ -11,10 +11,17 @@ const {
 
 // Handle fbclid parameter
 const url = new URL(Astro.request.url);
+console.log('Incoming URL:', Astro.request.url);
+console.log('URL after new URL():', url.toString());
+console.log('URL pathname:', url.pathname);
+console.log('URL search params:', Object.fromEntries(url.searchParams));
+
 if (url.searchParams.has('fbclid')) {
     url.searchParams.delete('fbclid');
     // Redirect to the same URL with all other parameters intact
-    return Astro.redirect(url.toString());
+    const redirectUrl = `${url.origin}${url.pathname}${url.search}`;
+    console.log('Redirecting to:', redirectUrl);
+    return Astro.redirect(redirectUrl);
 }
 
 const socialImage = '/social-preview.jpg';
