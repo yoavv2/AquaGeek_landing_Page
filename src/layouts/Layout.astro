@@ -13,7 +13,8 @@ const {
 const url = new URL(Astro.request.url);
 if (url.searchParams.has('fbclid')) {
     url.searchParams.delete('fbclid');
-    return Astro.redirect(url.pathname);
+    // Redirect to the same URL with all other parameters intact
+    return Astro.redirect(url.toString());
 }
 
 const socialImage = '/social-preview.jpg';
