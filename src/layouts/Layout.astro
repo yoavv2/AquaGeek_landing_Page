@@ -4,67 +4,10 @@ interface Props {
 	description?: string;
 }
 
-// Define the debug info type and extend globalThis
-type DebugInfo = {
-    rawUrl: string;
-    headers: { [k: string]: string };
-    userAgent: string | null;
-    referrer: string | null;
-    parsedUrl?: {
-        full: string;
-        origin: string;
-        pathname: string;
-        search: string;
-        params: { [k: string]: string };
-    };
-    redirectTo?: string;
-    error?: string;
-};
-
-// Extend globalThis
-declare global {
-    var debugInfo: DebugInfo | undefined;
-}
-
 const { 
 	title,
 	description = 'אקווה גיק - פתרונות מקצועיים לאקווריומים, כולל עיצוב, תחזוקה וייעוץ אישי למגוון סוגי אקווריומים.'
 } = Astro.props;
-
-// Initialize debug information
-const debugInfo: DebugInfo = {
-    rawUrl: Astro.request.url,
-    headers: Object.fromEntries(Astro.request.headers),
-    userAgent: Astro.request.headers.get('user-agent'),
-    referrer: Astro.request.headers.get('referer')
-};
-
-try {
-    // Handle fbclid parameter
-    const url = new URL(Astro.request.url);
-    debugInfo.parsedUrl = {
-        full: url.toString(),
-        origin: url.origin,
-        pathname: url.pathname,
-        search: url.search,
-        params: Object.fromEntries(url.searchParams)
-    };
-
-    if (url.searchParams.has('fbclid')) {
-        const params = new URLSearchParams(url.search);
-        params.delete('fbclid');
-        const newSearch = params.toString() ? `?${params.toString()}` : '';
-        const redirectUrl = `${url.pathname}${newSearch}`;
-        debugInfo.redirectTo = redirectUrl;
-        return Astro.redirect(redirectUrl, 301);
-    }
-} catch (error: unknown) {
-    debugInfo.error = error instanceof Error ? error.message : String(error);
-    console.error('Error processing URL:', error);
-}
-
-// Add debug info to a global variable that we can access in the template
-globalThis.debugInfo = debugInfo;
 
 const socialImage = '/social-preview.jpg';
 const siteUrl = 'https://aqua-geek-landing-page.vercel.app';
@@ -198,11 +141,6 @@ const siteUrl = 'https://aqua-geek-landing-page.vercel.app';
 		</script>
 	</head>
 	<body>
-		{/* Temporarily show debug info in all environments */}
-		<div style="background: #f0f0f0; padding: 10px; margin: 10px; font-family: monospace; direction: ltr; position: fixed; top: 0; left: 0; z-index: 9999; max-width: 100%; overflow: auto;">
-			<h3>Debug Info:</h3>
-			<pre>{JSON.stringify(debugInfo, null, 2)}</pre>
-		</div>
 		<slot />
 	</body>
 </html>
