@@ -9,6 +9,13 @@ const {
 	description = 'אקווה גיק - פתרונות מקצועיים לאקווריומים, כולל עיצוב, תחזוקה וייעוץ אישי למגוון סוגי אקווריומים.'
 } = Astro.props;
 
+// Handle fbclid parameter
+const url = new URL(Astro.request.url);
+if (url.searchParams.has('fbclid')) {
+    url.searchParams.delete('fbclid');
+    return Astro.redirect(url.pathname);
+}
+
 const socialImage = '/social-preview.jpg';
 const siteUrl = 'https://aqua-geek-landing-page.vercel.app';
 ---
