@@ -4,25 +4,65 @@ interface Props {
 	description?: string;
 }
 
+// Define the debug info type and extend globalThis
+type DebugInfo = {
+    rawUrl: string;
+    headers: { [k: string]: string };
+    userAgent: string | null;
+    referrer: string | null;
+    parsedUrl?: {
+        full: string;
+        origin: string;
+        pathname: string;
+        search: string;
+        params: { [k: string]: string };
+    };
+    redirectTo?: string;
+    error?: string;
+};
+
+// Extend globalThis
+declare global {
+    var debugInfo: DebugInfo | undefined;
+}
+
 const { 
 	title,
 	description = 'אקווה גיק - פתרונות מקצועיים לאקווריומים, כולל עיצוב, תחזוקה וייעוץ אישי למגוון סוגי אקווריומים.'
 } = Astro.props;
 
-// Handle fbclid parameter
-const url = new URL(Astro.request.url);
-console.log('Incoming URL:', Astro.request.url);
-console.log('URL after new URL():', url.toString());
-console.log('URL pathname:', url.pathname);
-console.log('URL search params:', Object.fromEntries(url.searchParams));
+// Initialize debug information
+const debugInfo: DebugInfo = {
+    rawUrl: Astro.request.url,
+    headers: Object.fromEntries(Astro.request.headers),
+    userAgent: Astro.request.headers.get('user-agent'),
+    referrer: Astro.request.headers.get('referer')
+};
 
-if (url.searchParams.has('fbclid')) {
-    url.searchParams.delete('fbclid');
-    // Redirect to the same URL with all other parameters intact
-    const redirectUrl = `${url.origin}${url.pathname}${url.search}`;
-    console.log('Redirecting to:', redirectUrl);
-    return Astro.redirect(redirectUrl);
+try {
+    // Handle fbclid parameter
+    const url = new URL(Astro.request.url);
+    debugInfo.parsedUrl = {
+        full: url.toString(),
+        origin: url.origin,
+        pathname: url.pathname,
+        search: url.search,
+        params: Object.fromEntries(url.searchParams)
+    };
+
+    if (url.searchParams.has('fbclid')) {
+        url.searchParams.delete('fbclid');
+        const redirectUrl = url.origin + url.pathname + (url.search || '');
+        debugInfo.redirectTo = redirectUrl;
+        return Astro.redirect(redirectUrl, 301); // 301 for permanent redirect
+    }
+} catch (error: unknown) {
+    debugInfo.error = error instanceof Error ? error.message : String(error);
+    console.error('Error processing URL:', error);
 }
+
+// Add debug info to a global variable that we can access in the template
+globalThis.debugInfo = debugInfo;
 
 const socialImage = '/social-preview.jpg';
 const siteUrl = 'https://aqua-geek-landing-page.vercel.app';
