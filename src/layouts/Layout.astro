@@ -196,6 +196,12 @@ const siteUrl = 'https://aqua-geek-landing-page.vercel.app';
 		</script>
 	</head>
 	<body>
+		{import.meta.env.DEV && (
+			<div style="background: #f0f0f0; padding: 10px; margin: 10px; font-family: monospace; direction: ltr; position: fixed; top: 0; left: 0; z-index: 9999; max-width: 100%; overflow: auto;">
+				<h3>Debug Info:</h3>
+				<pre>{JSON.stringify(debugInfo, null, 2)}</pre>
+			</div>
+		)}
 		<slot />
 	</body>
 </html>
